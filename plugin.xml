@@ -1,0 +1,171 @@
+<?xml version='1.0' encoding='utf-8'?>
+<plugin id="cordova-plugin-bdasr" version="0.0.1">
+    <name>bdasr</name>
+    <preference name="APIKEY"/>
+    <preference name="SECRETKEY"/>
+    <preference name="APPID"/>
+    <js-module name="bdasr" src="www/bdasr.js">
+        <clobbers target="bdasr"/>
+    </js-module>
+	<platform name="ios">
+        <config-file parent="/*" target="config.xml">
+            <feature name="bdasr">
+                <param name="ios-package" value="bdasr"/>
+                <param name="onload" value="true"/>
+            </feature>
+            <preference name="bdasrappid" value="$APPID"/>
+            <preference name="bdasrapikey" value="$APIKEY"/>
+            <preference name="bdasrsecretkey" value="$SECRETKEY"/>
+        </config-file>
+
+        <framework src="libc++.tbd" weak="true"/>
+        <framework src="libz.1.2.5.tbd" weak="true"/>
+        <framework src="AudioToolbox.framework" weak="true"/>
+        <framework src="AVFoundation.framework" weak="true"/>
+        <framework src="CFNetwork.framework" weak="true"/>
+        <framework src="CoreLocation.framework" weak="true"/>
+        <framework src="CoreTelephony.framework" weak="true"/>
+        <framework src="SystemConfiguration.framework" weak="true"/>
+        <framework src="GLKit.framework" weak="true"/>
+        <source-file framework="true" src="src/ios/BDSClientLib/libBaiduSpeechSDK.a"/>
+
+        <header-file src="src/ios/BDSClientHeaders/ASR/BDSASRDefines.h"/>
+        <header-file src="src/ios/BDSClientHeaders/ASR/BDSASRParameters.h"/>
+        <header-file src="src/ios/BDSClientHeaders/ASR/BDSEventManager.h"/>
+        <header-file src="src/ios/BDSClientHeaders/ASR/BDSUploaderDefines.h"/>
+        <header-file src="src/ios/BDSClientHeaders/ASR/BDSUploaderParameters.h"/>
+        <header-file src="src/ios/BDSClientHeaders/ASR/BDSWakeupDefines.h"/>
+        <header-file src="src/ios/BDSClientHeaders/ASR/BDSWakeupParameters.h"/>
+        
+        <header-file src="src/ios/BDSClientHeaders/ASR/UIHeaders/BDRecognizerViewController.h"/>
+        <header-file src="src/ios/BDSClientHeaders/ASR/UIHeaders/BDRecognizerViewDelegate.h"/>
+        <header-file src="src/ios/BDSClientHeaders/ASR/UIHeaders/BDRecognizerViewParamsObject.h"/>
+        <header-file src="src/ios/BDSClientHeaders/ASR/UIHeaders/BDTheme.h"/>
+
+
+        <resource-file src="src/ios/ASR/BDSClientEASRResources/bds_easr_basic_model.dat"/>
+        <!-- <resource-file src=""/> -->
+
+        <resource-file src="src/ios/ASR/BDSClientResources/Theme/defaultFullScreenTheme.bundle" target="BDSClientResources/Theme/defaultFullScreenTheme.bundle"/>
+        <resource-file src="src/ios/ASR/BDSClientResources/Theme/defaultTheme.bundle" target="BDSClientResources/Theme/defaultTheme.bundle"/>
+        <resource-file src="src/ios/ASR/BDSClientResources/Tone/record_cancel.caf" target="BDSClientResources/Tone/record_cancel.caf"/>
+        <resource-file src="src/ios/ASR/BDSClientResources/Tone/record_end.caf" target="BDSClientResources/Tone/record_end.caf"/>
+        <resource-file src="src/ios/ASR/BDSClientResources/Tone/record_fail.caf" target="BDSClientResources/Tone/record_fail.caf"/>
+        <resource-file src="src/ios/ASR/BDSClientResources/Tone/record_success.caf" target="BDSClientResources/Tone/record_success.caf"/>
+        <resource-file src="src/ios/ASR/BDSClientResources/Tone/record_start.caf" target="BDSClientResources/Tone/record_start.caf"/>
+
+        <header-file src="src/ios/bdasr.h"/>
+        <source-file src="src/ios/bdasr.m"/>
+
+        <config-file parent="NSMicrophoneUsageDescription" target="*-Info.plist">
+            <string>是否允许[TSM]使用您的麦克风？</string>
+        </config-file>
+        
+
+    </platform>
+    <platform name="android">
+        <config-file parent="/*" target="res/xml/config.xml">
+            <feature name="bdasr">
+                <param name="android-package" value="org.apache.cordova.bdasr.bdasr"/>
+            </feature>
+        </config-file>
+        <config-file target="AndroidManifest.xml" parent="/manifest/application">
+			<activity
+				android:name="org.apache.cordova.bdasr.ui.BaiduASRDigitalDialog"
+				android:configChanges="orientation|keyboardHidden|screenLayout"
+				android:theme="@android:style/Theme.Dialog"
+				android:exported="false"
+				android:screenOrientation="portrait">
+				<intent-filter>
+					<action android:name="com.baidu.action.RECOGNIZE_SPEECH"/>
+					<category android:name="android.intent.category.DEFAULT"/>
+				</intent-filter>
+			</activity>
+            <meta-data
+                    android:name="com.baidu.speech.APP_ID"
+                    android:value="$APPID"/>
+            <meta-data
+                    android:name="com.baidu.speech.API_KEY"
+                    android:value="$APIKEY"/>
+            <meta-data
+                    android:name="com.baidu.speech.SECRET_KEY"
+                    android:value="$SECRETKEY"/>
+            <service
+                    android:name="com.baidu.speech.VoiceRecognitionService"
+                    android:exported="false"/>
+        </config-file>
+
+        <config-file parent="/*" target="AndroidManifest.xml">
+            <uses-permission android:name="android.permission.RECORD_AUDIO" />
+            <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+            <uses-permission android:name="android.permission.INTERNET" />
+            <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+            <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+        </config-file>
+
+        <source-file src="src/android/libs/armeabi/libBaiduSpeechSDK.so" target-dir="libs/armeabi"/>
+        <source-file src="src/android/libs/armeabi/libvad.dnn.so" target-dir="libs/armeabi"/>
+		
+
+        <source-file src="src/android/libs/x86_64/libBaiduSpeechSDK.so" target-dir="libs/x86_64"/>
+        <source-file src="src/android/libs/x86_64/libvad.dnn.so" target-dir="libs/x86_64"/>
+
+        <source-file src="src/android/libs/x86/libBaiduSpeechSDK.so" target-dir="libs/x86"/>
+        <source-file src="src/android/libs/x86/libvad.dnn.so" target-dir="libs/x86"/>
+
+        <source-file src="src/android/libs/arm64-v8a/libBaiduSpeechSDK.so" target-dir="libs/arm64-v8a"/>
+        <source-file src="src/android/libs/arm64-v8a/libvad.dnn.so" target-dir="libs/arm64-v8a"/>
+
+        <source-file src="src/android/libs/armeabi-v7a/libBaiduSpeechSDK.so" target-dir="libs/armeabi-v7a"/>
+        <source-file src="src/android/libs/armeabi-v7a/libvad.dnn.so" target-dir="libs/armeabi-v7a"/>
+
+        <source-file src="src/android/libs/bdasr_V3_20180801_d6f298a.jar" target-dir="libs"/>
+        <source-file src="src/android/bdasr.java" target-dir="src/org/apache/cordova/bdasr"/>
+		
+		<source-file src="src/android/ui/BaiduASRDialog.java" target-dir="src/org/apache/cordova/bdasr/ui"/>
+		<source-file src="src/android/ui/BaiduASRDialogTheme.java" target-dir="src/org/apache/cordova/bdasr/ui"/>
+		<source-file src="src/android/ui/BaiduASRDigitalDialog.java" target-dir="src/org/apache/cordova/bdasr/ui"/>
+		<source-file src="src/android/ui/ColorFilterGenerator.java" target-dir="src/org/apache/cordova/bdasr/ui"/>
+		<source-file src="src/android/ui/DigitalDialogInput.java" target-dir="src/org/apache/cordova/bdasr/ui"/>
+		<source-file src="src/android/ui/SDKAnimationView.java" target-dir="src/org/apache/cordova/bdasr/ui"/>
+		<source-file src="src/android/ui/SDKProgressBar.java" target-dir="src/org/apache/cordova/bdasr/ui"/>
+		<source-file src="src/android/ui/TipsAdapter.java" target-dir="src/org/apache/cordova/bdasr/ui"/>
+		
+		<source-file src="src/android/core/util/FileUtil.java" target-dir="src/org/apache/cordova/bdasr/core/util"/>
+		<source-file src="src/android/core/util/MyLogger.java" target-dir="src/org/apache/cordova/bdasr/core/util"/>
+		
+		<source-file src="src/android/core/recog/IStatus.java" target-dir="src/org/apache/cordova/bdasr/core/recog"/>
+		<source-file src="src/android/core/recog/MyRecognizer.java" target-dir="src/org/apache/cordova/bdasr/core/recog"/>
+		<source-file src="src/android/core/recog/RecogResult.java" target-dir="src/org/apache/cordova/bdasr/core/recog"/>
+		
+		<source-file src="src/android/core/recog/listener/ChainRecogListener.java" target-dir="src/org/apache/cordova/bdasr/core/recog/listener"/>
+		<source-file src="src/android/core/recog/listener/IRecogListener.java" target-dir="src/org/apache/cordova/bdasr/core/recog/listener"/>
+		<source-file src="src/android/core/recog/listener/MessageStatusRecogListener.java" target-dir="src/org/apache/cordova/bdasr/core/recog/listener"/>
+		<source-file src="src/android/core/recog/listener/RecogEventAdapter.java" target-dir="src/org/apache/cordova/bdasr/core/recog/listener"/>
+		<source-file src="src/android/core/recog/listener/StatusRecogListener.java" target-dir="src/org/apache/cordova/bdasr/core/recog/listener"/>
+		
+		<source-file src="src/android/res/values/dimens.xml" target-dir="res/values"/>
+		
+		<source-file src="src/android/res/layout/bdspeech_suggestion_item.xml" target-dir="res/layout"/>
+		<source-file src="src/android/res/layout/common_mini.xml" target-dir="res/layout"/>
+		<source-file src="src/android/res/layout/activity_main.xml" target-dir="res/layout"/>
+		<source-file src="src/android/res/layout/bdspeech_digital_layout.xml" target-dir="res/layout"/>
+		
+		<source-file src="src/android/res/drawable-hdpi/bdspeech_close_v2.png" target-dir="res/drawable-hdpi"/>
+		<source-file src="src/android/res/drawable-hdpi/bdspeech_help_light.png" target-dir="res/drawable-hdpi"/>
+		<source-file src="src/android/res/drawable-hdpi/bdspeech_help_pressed_light.png" target-dir="res/drawable-hdpi"/>
+		<source-file src="src/android/res/drawable-hdpi/bdspeech_mask_light.png" target-dir="res/drawable-hdpi"/>
+
+		<source-file src="src/android/res/drawable/bdspeech_btn_normal.9.png" target-dir="res/drawable"/>
+		<source-file src="src/android/res/drawable/bdspeech_btn_pressed.9.png" target-dir="res/drawable"/>
+		<source-file src="src/android/res/drawable/bdspeech_btn_recognizing.9.png" target-dir="res/drawable"/>
+		<source-file src="src/android/res/drawable/bdspeech_digital_bg.9.png" target-dir="res/drawable"/>
+		<source-file src="src/android/res/drawable/bdspeech_left_normal.9.png" target-dir="res/drawable"/>
+		<source-file src="src/android/res/drawable/bdspeech_left_pressed.9.png" target-dir="res/drawable"/>
+		<source-file src="src/android/res/drawable/bdspeech_right_normal.9.png" target-dir="res/drawable"/>
+		<source-file src="src/android/res/drawable/bdspeech_right_pressed.9.png" target-dir="res/drawable"/>
+		
+		
+
+    </platform>
+</plugin>

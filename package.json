@@ -1,0 +1,19 @@
+{
+  "name": "cordova-plugin-bdasr",
+  "version": "0.0.1",
+  "description": "a cordova plugin, a JS version of bdasr",
+  "cordova": {
+    "id": "cordova-plugin-bdasr",
+    "platforms": [
+      "android",
+      "ios"
+    ]
+  },
+  "keywords": [
+    "cordova-android",
+    "cordova-ios",
+    "cordova-plugin-bdasr",
+    "ASR"
+  ],
+  "license": "ISC"
+}
